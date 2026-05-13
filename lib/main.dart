@@ -1,80 +1,86 @@
 import 'package:flutter/material.dart';
 
-// 1. O ponto de entrada agora chama a classe correta
 void main() {
-  runApp(const MeuApp());
+  runApp(const MyApp());
 }
 
-// 2. Configurações Globais do App (Tema, Título, etc.)
-class MeuApp extends StatelessWidget {
-  const MeuApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meu App Flutter',
-      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 183, 58, 58)),
       ),
-      home: const PaginaPrincipal(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-// 3. A estrutura da tela (Scaffold)
-class PaginaPrincipal extends StatelessWidget {
-  const PaginaPrincipal({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Barra Superior
       appBar: AppBar(
-        title: const Text('Exemplo Scaffold'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        centerTitle: true,
+        title: const Text('AppBar'),
+          backgroundColor: Colors.redAccent,
       ),
-      
-      // Menu Lateral (Hambúrguer)
+      body: const Center(
+        child: Text(
+          'Body',
+        style: TextStyle (
+          fontSize: 12,
+          color: Colors.blueGrey,
+          ),
+        ),
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const[
+            ListTile(
+              title: Text('End Drawer'),
+            )
+          ],
+        )
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
-            ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configurações'),
-            ),
-          ],
-        ),
+              title: Text('Drawer'),
+            )
+          ], //children
+        )
       ),
-      
-      // Corpo da tela
-      body: const Center(
-        child: Text(
-          'Conteúdo da Interface',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-        ),
-      ),
-      
-      // Botão Flutuante
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Ação do botão aqui
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        // ações do botão
         },
-        child: const Icon(Icons.add),
+        backgroundColor: const Color.fromARGB(255, 252, 96, 85),
+        child: Text('Botão Flutuante',
+          style: TextStyle(
+            fontSize: 12,
+            color: const Color.fromARGB(255, 122, 18, 10)
+              ),
+          ), 
       ),
-      
-      // Barra de Navegação Inferior
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Negócios'),
+      bottomNavigationBar: BottomNavigationBar(items: const[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Botão 1'),
+        BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Botão 2'),
         ],
       ),
     );
