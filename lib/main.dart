@@ -1,86 +1,194 @@
 import 'package:flutter/material.dart';
 
 void main() {
+  // Inicializa a execução do aplicativo chamando o widget principal
   runApp(const MyApp());
 }
 
+// ==========================================
+// CONFIGURAÇÃO INICIAL DO APLICATIVO (THEME)
+// ==========================================
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 183, 58, 58)),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // Configurações globais do aplicativo
+      debugShowCheckedModeBanner: false, // Oculta a tarja vermelha de "Debug" no canto da tela
+      home: const PaginaInicial(), // Define qual será a tela de abertura do app
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+// ==========================================
+// TELA PRINCIPAL: ESTRUTURA DO CURRÍCULO
+// ==========================================
+class PaginaInicial extends StatelessWidget {
+  const PaginaInicial({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // O Scaffold funciona como a "carcaça" ou esqueleto padrão do Material Design
     return Scaffold(
+      
+      // ----------------------------------------
+      // BARRA SUPERIOR (APPBAR)
+      // ----------------------------------------
       appBar: AppBar(
-        title: const Text('AppBar'),
-          backgroundColor: Colors.redAccent,
-      ),
-      body: const Center(
-        child: Text(
-          'Body',
-        style: TextStyle (
-          fontSize: 12,
-          color: Colors.blueGrey,
-          ),
+        title: const Text('ETEC Mongaguá - PAM I'), // Texto central da barra
+        backgroundColor: const Color.fromARGB(255, 194, 31, 31), // Cor de fundo principal do tema
+        centerTitle: true, // Garante a centralização do título em iOS e Android
+        elevation: 10, // Define a intensidade da sombra abaixo da barra
+        // Shape customiza as bordas da AppBar (neste caso, arredondando os cantos inferiores)
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
         ),
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const[
-            ListTile(
-              title: Text('End Drawer'),
-            )
-          ],
-        )
+
+      // ----------------------------------------
+      // MENU LATERAL ESQUERDO (DRAWER)
+      // ----------------------------------------
+      drawer: const Drawer(
+        // Menu focado na navegação estrutural do sistema
+        child: Center(child: Text('(Menu)')),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            ListTile(
-              title: Text('Drawer'),
-            )
-          ], //children
-        )
+
+      // ----------------------------------------
+      // MENU LATERAL DIREITO (ENDDRAWER)
+      // ----------------------------------------
+      endDrawer: const Drawer(
+        // Menu focado em configurações, preferências e dados do usuário
+        child: Center(child: Text('(Configurações)')),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        // ações do botão
-        },
-        backgroundColor: const Color.fromARGB(255, 252, 96, 85),
-        child: Text('Botão Flutuante',
-          style: TextStyle(
-            fontSize: 12,
-            color: const Color.fromARGB(255, 122, 18, 10)
+
+      // ----------------------------------------
+      // CORPO PRINCIPAL (BODY)
+      // ----------------------------------------
+      // Utiliza SingleChildScrollView para permitir a rolagem da tela caso o conteúdo ultrapasse a altura do dispositivo
+      body: SingleChildScrollView( 
+        // Adiciona um espaçamento interno de 20 pixels em todos os lados da tela
+        padding: const EdgeInsets.all(20.0),
+        
+        // A Column organiza os elementos de cima para baixo (verticalmente)
+        child: Column(
+          // Centraliza todos os widgets filhos horizontalmente dentro da coluna
+          crossAxisAlignment: CrossAxisAlignment.center, 
+          children: [
+            // 1. Foto de Perfil: Usa dois CircleAvatar sobrepostos para criar uma moldura circular
+            const CircleAvatar(
+              radius: 60, // Tamanho do círculo externo (moldura)
+              backgroundColor: Color.fromARGB(255, 143, 0, 0), // Cor da moldura
+              child: CircleAvatar(
+                radius: 56, // Tamanho do círculo interno (imagem)
+                // Busca a imagem de perfil diretamente de uma URL externa
+                backgroundImage: NetworkImage('https://avatars.githubusercontent.com/u/198913136?v=4'), 
               ),
-          ), 
+            ),
+            
+            // SizedBox cria um espaço vazio vertical de 15 pixels para separar a foto do nome
+            const SizedBox(height: 15),
+
+            // 2. Nome e Idade: Widgets de texto com estilização diferenciada
+            const Text(
+              'Guilherme da Silva Santos',
+              textAlign: TextAlign.center, // Centraliza o texto
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold), // Fonte maior e negrito
+            ),
+            const Text(
+              '16 anos - Mongaguá, SP',
+              style: TextStyle(fontSize: 16, color: Colors.blueGrey), // Fonte menor com cor suave
+            ),
+            const SizedBox(height: 20),
+
+            // 3. Contatos: Seção delimitada por linhas divisórias (Divider)
+            const Divider(), // Linha horizontal separadora
+            // Chamadas ao método auxiliar para construir cada linha de contato de forma limpa
+            _buildContactItem(Icons.email, 'Guilherme.santos302@aluno.cps.sp.gov.br'),
+            _buildContactItem(Icons.phone, '(13) 98159-0400'),
+            _buildContactItem(Icons.web, '@GuilhermeS.santos@gmail.com'),
+            const Divider(),
+            const SizedBox(height: 20),
+
+            // 4. Resumo Profissional: Usa Align para garantir que o título fique alinhado à esquerda
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Resumo Profissional',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromRGBO(196, 24, 24, 1)),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Estudo na escola Etec Adolpho Berezin, pretendo ser advogado futuramente',
+              textAlign: TextAlign.justify, // Distribui o texto uniformemente nas laterais (justificado)
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 25),
+
+            // 5. Objetivo: Segue o mesmo padrão visual do resumo para manter a consistência do design
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Objetivo',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 190, 27, 27)),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Passar em uma boa faculdade.',
+              textAlign: TextAlign.justify,
+              // Estilo em Itálico para destacar o objetivo profissional do restante do texto
+              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(items: const[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Botão 1'),
-        BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Botão 2'),
+
+      // ----------------------------------------
+      // BARRA DE NAVEGAÇÃO INFERIOR (BOTTOMBAR)
+      // ----------------------------------------
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Sobre'),
+        ],
+      ),
+
+      // ----------------------------------------
+      // BOTÃO FLUTUANTE (FLOATINGACTIONBUTTON)
+      // ----------------------------------------
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Evento de clique disparado no console
+          print('Botão Flutuante Pressionado!');
+        },
+        backgroundColor: const Color.fromARGB(255, 168, 30, 30), // Combina com a cor da identidade da AppBar
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
+  }
+
+  // ==========================================
+  // METODOS E FUNÇÕES AUXILIARES
+  // ==========================================
+  // Define uma função privada (_) que retorna um widget customizado.
+  // Serve para encapsular e padronizar as linhas de contato sem repetir código (Clean Code).
+  Widget _buildContactItem(IconData icone, String texto) {
+    return Padding(
+      // Adiciona um pequeno espaçamento (respiro) de 5 pixels acima e abaixo de cada linha
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
+        // Organiza o Ícone e o Texto horizontalmente (lado a lado)
+        children: [
+          // Exibe o ícone passado por parâmetro
+          Icon(icone, color: const Color.fromARGB(255, 184, 32, 32), size: 20),
+          
+          // Cria um bloco invisível com largura fixa de 15 pixels para afastar o texto do ícone
+          const SizedBox(width: 15),
+          
+          // Exibe a string de texto recebida por parâmetro
+          Text(texto, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
