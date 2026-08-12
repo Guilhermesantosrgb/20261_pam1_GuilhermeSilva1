@@ -161,6 +161,7 @@ class PaginaInicial extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Evento de clique disparado no console
+          // ignore: avoid_print
           print('Botão Flutuante Pressionado!');
         },
         backgroundColor: const Color.fromARGB(255, 168, 30, 30), // Combina com a cor da identidade da AppBar
